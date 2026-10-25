@@ -42,6 +42,17 @@ extension CLIClient
             process.standardOutput = stdoutPipe
             process.standardError = stderrPipe
 
+            if let stdinText = (command as? CLI.RegistryCommand)?.stdinInput
+            {
+                let stdinPipe = Pipe()
+                process.standardInput = stdinPipe
+                if let data = stdinText.data(using: .utf8)
+                {
+                    stdinPipe.fileHandleForWriting.write(data)
+                    stdinPipe.fileHandleForWriting.closeFile()
+                }
+            }
+
             do { try process.run() }
             catch
             {

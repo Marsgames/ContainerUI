@@ -20,17 +20,17 @@ Get the app running and talking to the container runtime. No polish, just workin
 
 ---
 
-## v0.2 — MVP
+## v0.2 — MVP `[in progress]`
 
 The minimum viable product: everything a user needs to replace the command line for day-to-day container work.
 
-- [ ] View container logs (live-streaming)
-- [ ] View container details (ports, mounts, environment variables, resource usage)
-- [ ] Delete a container (with confirmation)
-- [ ] Pull an image from a registry
-- [ ] Delete an image (with confirmation)
-- [ ] Add / remove a registry (credentials stored in Keychain)
-- [ ] Error handling and user-facing error messages throughout
+- [x] View container logs
+- [x] View container details (mounts, environment variables, resource usage)
+- [x] Delete a container (with confirmation)
+- [x] Pull an image from a registry
+- [x] Delete an image (with confirmation)
+- [x] Add / remove a registry (credentials stored in Keychain)
+- [x] Error handling and user-facing error messages throughout
 
 ---
 

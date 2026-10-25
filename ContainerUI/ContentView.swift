@@ -76,7 +76,9 @@ struct ContentView: View
                         ContainersView(repository: appState.containers)
                     case .images:
                         ImagesView(repository: appState.images)
-                    case .registries, .documentation, .parameters:
+                    case .registries:
+                        RegistriesView(repository: appState.registries)
+                    case .documentation, .parameters:
                         ComingSoonView(section: selectedSection.wrappedValue)
                 }
             }

@@ -16,6 +16,18 @@ final class ContainerRepository: IContainerRepository
         return try await cli.run(command: CLI.ContainerCommand.listAll)
     }
 
+    func inspect(containerID: String) async throws -> ContainerDetail
+    {
+        let items: [ContainerDetail] = try await cli.run(command: CLI.ContainerCommand.inspect(containerID: containerID))
+        guard let detail = items.first else { throw Errors.CLI.commandFailed(exitCode: 1, stderr: "No data for \(containerID)") }
+        return detail
+    }
+
+    func logs(containerID: String) async throws -> String
+    {
+        return try await cli.run(command: CLI.ContainerCommand.logs(containerID: containerID))
+    }
+
     func start(containerID: String) async throws
     {
         try await cli.run(command: CLI.ContainerCommand.start(containerID: containerID))

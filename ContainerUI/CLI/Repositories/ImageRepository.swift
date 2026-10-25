@@ -15,4 +15,14 @@ final class ImageRepository: IImageRepository
     {
         return try await cli.run(command: CLI.ImageCommand.listAll)
     }
+
+    func pull(reference: String) async throws
+    {
+        try await cli.run(command: CLI.ImageCommand.pull(reference: reference))
+    }
+
+    func delete(reference: String) async throws
+    {
+        try await cli.run(command: CLI.ImageCommand.delete(reference: reference))
+    }
 }

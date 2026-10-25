@@ -5,6 +5,8 @@ protocol IContainerRepository
     // MARK: - Queries
 
     func listAll() async throws -> [Container]
+    func inspect(containerID: String) async throws -> ContainerDetail
+    func logs(containerID: String) async throws -> String
 
     // MARK: - Actions
 

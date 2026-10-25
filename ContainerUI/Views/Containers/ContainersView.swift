@@ -7,6 +7,8 @@ final class ContainersViewModel
     var isLoading = false
     var error: String?
     var pendingActions: Set<String> = []
+    var containerToDelete: Container?
+    var selectedContainer: Container?
 
     private let repository: any IContainerRepository
 
@@ -37,7 +39,6 @@ final class ContainersViewModel
             try await self.repository.start(containerID: container.id)
         }
 
-        // The container's init process may have exited immediately (e.g. bash without a TTY).
         if let updated = containers.first(where: { $0.id == container.id }), !updated.status.isRunning
         {
             error = "'\(container.name)' started but exited immediately. The init process may need a TTY or a long-running command."
@@ -57,6 +58,19 @@ final class ContainersViewModel
         await performAction(on: container)
         {
             try await self.repository.restart(containerID: container.id)
+        }
+    }
+
+    func confirmDelete(_ container: Container)
+    {
+        containerToDelete = container
+    }
+
+    func delete(_ container: Container) async
+    {
+        await performAction(on: container)
+        {
+            try await self.repository.delete(containerID: container.id)
         }
     }
 }
@@ -87,9 +101,11 @@ private extension ContainersViewModel
 struct ContainersView: View
 {
     @State private var vm: ContainersViewModel
+    let repository: any IContainerRepository
 
     init(repository: any IContainerRepository)
     {
+        self.repository = repository
         _vm = State(wrappedValue: ContainersViewModel(repository: repository))
     }
 
@@ -126,6 +142,27 @@ struct ContainersView: View
                 }
                 .buttonStyle(.plain)
             }
+        }
+        .sheet(item: $vm.selectedContainer)
+        { container in
+            ContainerDetailView(containerID: container.id, containerName: container.name, repository: repository)
+        }
+        .confirmationDialog(
+            "Delete \"\(vm.containerToDelete?.name ?? "")\"?",
+            isPresented: Binding(get: { vm.containerToDelete != nil }, set: { if !$0 { vm.containerToDelete = nil } }),
+            titleVisibility: .visible
+        )
+        {
+            Button("Delete", role: .destructive)
+            {
+                if let container = vm.containerToDelete
+                {
+                    Task { await vm.delete(container) }
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently remove the container.")
         }
         .if(vm.error != nil)
         { view in
@@ -170,6 +207,8 @@ struct ContainersView: View
                                 case .start:   await vm.start(container)
                                 case .stop:    await vm.stop(container)
                                 case .restart: await vm.restart(container)
+                                case .delete:  vm.confirmDelete(container)
+                                case .inspect: vm.selectedContainer = container
                             }
                         }
                     }
@@ -182,7 +221,7 @@ struct ContainersView: View
 
 // MARK: - ContainerRow
 
-enum ContainerAction { case start, stop, restart }
+enum ContainerAction { case start, stop, restart, delete, inspect }
 
 struct ContainerRow: View
 {
@@ -217,6 +256,7 @@ struct ContainerRow: View
         .background(Color(hex: 0x2A2A2A))
         .opacity(isPending ? 0.6 : 1)
         .animation(.easeInOut(duration: 0.15), value: isPending)
+        .onTapGesture { onAction(.inspect) }
     }
 
     private var statusIndicator: some View
@@ -268,14 +308,18 @@ struct ContainerRow: View
             {
                 Color.clear.frame(width: 28, height: 28)
             }
-            else if container.status.isRunning
-            {
-                actionButton("stop.fill", color: Color(hex: 0xFF6B35)) { onAction(.stop) }
-                actionButton("arrow.clockwise", color: .white.opacity(0.5)) { onAction(.restart) }
-            }
             else
             {
-                actionButton("play.fill", color: Color(hex: 0x4ADE80)) { onAction(.start) }
+                if container.status.isRunning
+                {
+                    actionButton("stop.fill", color: Color(hex: 0xFF6B35)) { onAction(.stop) }
+                    actionButton("arrow.clockwise", color: .white.opacity(0.5)) { onAction(.restart) }
+                }
+                else
+                {
+                    actionButton("play.fill", color: Color(hex: 0x4ADE80)) { onAction(.start) }
+                }
+                actionButton("trash", color: .white.opacity(0.35)) { onAction(.delete) }
             }
         }
     }
