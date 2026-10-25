@@ -1,3 +1,10 @@
+---------- 0.2 ----------
+New:
+- Tap any container row to open its detail sheet (resources, environment, mounts, and a Logs tab).
+- Delete a container or image from the list — a confirmation dialog appears before removal.
+- Pull an image using the download button in the Images toolbar; enter any OCI reference.
+- Add and remove container registries (Docker Hub, GHCR, etc.) with login credentials stored securely in the Keychain.
+
 ---------- 0.1 ----------
 New:
 - Containers are now listed with their status, image, and action buttons (start, stop, restart).

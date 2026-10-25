@@ -31,6 +31,7 @@ final class AppState
     let cli: CLIClient
     let containers: ContainerRepository
     let images: ImageRepository
+    let registries: RegistryRepository
 
     init()
     {
@@ -38,6 +39,7 @@ final class AppState
         self.cli = cli
         self.containers = ContainerRepository(cli: cli)
         self.images = ImageRepository(cli: cli)
+        self.registries = RegistryRepository(cli: cli)
     }
 
     func bootstrap() async

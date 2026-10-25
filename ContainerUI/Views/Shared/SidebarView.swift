@@ -38,7 +38,7 @@ struct SidebarView: View {
 
                 Spacer()
             }
-            .padding(.top, 8)
+            .padding(.top, 44)
         }
         .frame(width: 220)
     }

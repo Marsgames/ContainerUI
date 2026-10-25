@@ -1,3 +1,10 @@
+---------- 0.2 ----------
+Nouveautés :
+- Appuyer sur un conteneur ouvre une fiche de détail (ressources, variables d'environnement, montages, et un onglet Logs).
+- Supprimer un conteneur ou une image depuis la liste — une boîte de confirmation s'affiche avant la suppression.
+- Télécharger une image via le bouton dans la barre d'outils des images ; saisir n'importe quelle référence OCI.
+- Ajouter et supprimer des registres (Docker Hub, GHCR, etc.) avec les identifiants stockés dans le Trousseau.
+
 ---------- 0.1 ----------
 Nouveautés :
 - Les conteneurs sont listés avec leur statut, leur image et des boutons d'action (démarrer, arrêter, redémarrer).

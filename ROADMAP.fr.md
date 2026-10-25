@@ -20,17 +20,17 @@ Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de
 
 ---
 
-## v0.2 — MVP
+## v0.2 — MVP `[en cours]`
 
 Le produit minimum viable : tout ce dont un utilisateur a besoin pour remplacer la ligne de commande au quotidien.
 
-- [ ] Afficher les logs d'un conteneur (en temps réel)
-- [ ] Afficher les détails d'un conteneur (ports, montages, variables d'environnement, ressources)
-- [ ] Supprimer un conteneur (avec confirmation)
-- [ ] Télécharger une image depuis un registre (pull)
-- [ ] Supprimer une image (avec confirmation)
-- [ ] Ajouter / supprimer un registre (identifiants stockés dans le Trousseau)
-- [ ] Gestion des erreurs et messages d'erreur affichés à l'utilisateur
+- [x] Afficher les logs d'un conteneur
+- [x] Afficher les détails d'un conteneur (montages, variables d'environnement, ressources)
+- [x] Supprimer un conteneur (avec confirmation)
+- [x] Télécharger une image depuis un registre (pull)
+- [x] Supprimer une image (avec confirmation)
+- [x] Ajouter / supprimer un registre (identifiants stockés dans le Trousseau)
+- [x] Gestion des erreurs et messages d'erreur affichés à l'utilisateur
 
 ---
 
