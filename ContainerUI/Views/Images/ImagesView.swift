@@ -124,7 +124,7 @@ struct ImageRow: View
 
             VStack(alignment: .leading, spacing: 2)
             {
-                Text(image.name)
+                Text(image.repository)
                     .foregroundColor(.white)
                     .font(.system(size: 13, weight: .medium))
                 Text(image.tag)
@@ -134,12 +134,6 @@ struct ImageRow: View
 
             Spacer()
 
-            if let size = image.size
-            {
-                Text(ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file))
-                    .foregroundColor(.white.opacity(0.4))
-                    .font(.system(size: 11))
-            }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)

@@ -12,10 +12,10 @@ Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de
 - [x] Navigation latérale (Conteneurs, Images, Registres, Documentation, Paramètres)
 - [x] Écran de chargement avec indicateur de progression
 - [x] Détection des composants manquants et invite d'installation
-- [ ] Connexion au runtime du système de conteneurs Apple via CLI/XPC
-- [ ] Lister les conteneurs en cours et arrêtés
-- [ ] Démarrer / arrêter / redémarrer un conteneur
-- [ ] Lister les images locales
+- [x] Connexion au runtime du système de conteneurs Apple via CLI/XPC
+- [x] Lister les conteneurs en cours et arrêtés
+- [x] Démarrer / arrêter / redémarrer un conteneur
+- [x] Lister les images locales
 - [ ] Préférences de base (persistance de l'état de la fenêtre)
 
 ---

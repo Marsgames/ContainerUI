@@ -36,6 +36,12 @@ final class ContainersViewModel
         {
             try await self.repository.start(containerID: container.id)
         }
+
+        // The container's init process may have exited immediately (e.g. bash without a TTY).
+        if let updated = containers.first(where: { $0.id == container.id }), !updated.status.isRunning
+        {
+            error = "'\(container.name)' started but exited immediately. The init process may need a TTY or a long-running command."
+        }
     }
 
     func stop(_ container: Container) async

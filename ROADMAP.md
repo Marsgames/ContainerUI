@@ -12,10 +12,10 @@ Get the app running and talking to the container runtime. No polish, just workin
 - [x] Side panel navigation (Containers, Images, Registries, Documentation, Parameters)
 - [x] Loading screen with progress indicator
 - [x] Missing-components detection and install prompt
-- [ ] Connect to Apple's container system runtime via CLI/XPC
-- [ ] List running and stopped containers
-- [ ] Start / stop / restart a container
-- [ ] List local images
+- [x] Connect to Apple's container system runtime via CLI/XPC
+- [x] List running and stopped containers
+- [x] Start / stop / restart a container
+- [x] List local images
 - [ ] Basic app preferences (window state persistence)
 
 ---
