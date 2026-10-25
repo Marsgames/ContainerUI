@@ -1,0 +1,13 @@
+---------- 0.1 ----------
+Nouveautés :
+- Les conteneurs sont listés avec leur statut, leur image et des boutons d'action (démarrer, arrêter, redémarrer).
+- Les images sont listées avec leur dépôt et leur tag.
+- L'application détecte si le runtime de conteneurs Apple est installé et en cours d'exécution, et guide l'utilisateur si ce n'est pas le cas.
+- L'application mémorise la taille de la fenêtre et la dernière section ouverte entre chaque lancement.
+
+Améliorations :
+- Les boutons d'action affichent un spinner sur leur ligne pendant qu'une opération est en cours.
+- Un avertissement s'affiche quand un conteneur s'arrête immédiatement après avoir été démarré (ex. absence de TTY).
+
+Sous le capot :
+- Améliorations techniques et de fiabilité.
