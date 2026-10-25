@@ -45,6 +45,7 @@ extension CLIClient
             do { try process.run() }
             catch
             {
+                log.error("✗ \(command.name) process launch failed: \(error)")
                 continuation.resume(throwing: Errors.CLI.unknown(error))
                 return
             }
