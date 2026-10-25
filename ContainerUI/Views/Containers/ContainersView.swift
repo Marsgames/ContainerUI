@@ -6,6 +6,7 @@ final class ContainersViewModel
     var containers: [Container] = []
     var isLoading = false
     var error: String?
+    var pendingActions: Set<String> = []
 
     private let repository: any IContainerRepository
 
@@ -31,35 +32,41 @@ final class ContainersViewModel
 
     func start(_ container: Container) async
     {
-        do
+        await performAction(on: container)
         {
-            try await repository.start(containerID: container.id)
-            await refresh()
-        }
-        catch
-        {
-            self.error = Errors.CLIMapper.map(error).userMessage
+            try await self.repository.start(containerID: container.id)
         }
     }
 
     func stop(_ container: Container) async
     {
-        do
+        await performAction(on: container)
         {
-            try await repository.stop(containerID: container.id)
-            await refresh()
-        }
-        catch
-        {
-            self.error = Errors.CLIMapper.map(error).userMessage
+            try await self.repository.stop(containerID: container.id)
         }
     }
 
     func restart(_ container: Container) async
     {
+        await performAction(on: container)
+        {
+            try await self.repository.restart(containerID: container.id)
+        }
+    }
+}
+
+// MARK: - Private helpers
+
+private extension ContainersViewModel
+{
+    func performAction(on container: Container, action: () async throws -> Void) async
+    {
+        pendingActions.insert(container.id)
+        defer { pendingActions.remove(container.id) }
+
         do
         {
-            try await repository.restart(containerID: container.id)
+            try await action()
             await refresh()
         }
         catch
@@ -68,6 +75,8 @@ final class ContainersViewModel
         }
     }
 }
+
+// MARK: - ContainersView
 
 struct ContainersView: View
 {
@@ -143,7 +152,10 @@ struct ContainersView: View
             {
                 ForEach(vm.containers)
                 { container in
-                    ContainerRow(container: container)
+                    ContainerRow(
+                        container: container,
+                        isPending: vm.pendingActions.contains(container.id)
+                    )
                     { action in
                         Task
                         {
@@ -162,20 +174,21 @@ struct ContainersView: View
     }
 }
 
+// MARK: - ContainerRow
+
 enum ContainerAction { case start, stop, restart }
 
 struct ContainerRow: View
 {
     let container: Container
+    let isPending: Bool
     let onAction: (ContainerAction) -> Void
 
     var body: some View
     {
         HStack(spacing: 14)
         {
-            Circle()
-                .fill(container.status.isRunning ? Color(hex: 0x4ADE80) : Color(hex: 0x555555))
-                .frame(width: 8, height: 8)
+            statusIndicator
 
             VStack(alignment: .leading, spacing: 2)
             {
@@ -189,34 +202,76 @@ struct ContainerRow: View
 
             Spacer()
 
-            Text(container.status.rawValue)
-                .foregroundColor(container.status.isRunning ? Color(hex: 0x4ADE80) : Color.white.opacity(0.4))
-                .font(.system(size: 11, weight: .medium))
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(
-                    Capsule()
-                        .fill(container.status.isRunning
-                              ? Color(hex: 0x4ADE80).opacity(0.12)
-                              : Color.white.opacity(0.06))
-                )
+            statusBadge
 
-            HStack(spacing: 4)
-            {
-                if container.status.isRunning
-                {
-                    actionButton("stop.fill", color: Color(hex: 0xFF6B35)) { onAction(.stop) }
-                    actionButton("arrow.clockwise", color: .white.opacity(0.5)) { onAction(.restart) }
-                }
-                else
-                {
-                    actionButton("play.fill", color: Color(hex: 0x4ADE80)) { onAction(.start) }
-                }
-            }
+            actions
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)
         .background(Color(hex: 0x2A2A2A))
+        .opacity(isPending ? 0.6 : 1)
+        .animation(.easeInOut(duration: 0.15), value: isPending)
+    }
+
+    private var statusIndicator: some View
+    {
+        ZStack
+        {
+            if isPending
+            {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .scaleEffect(0.5)
+                    .tint(.white.opacity(0.6))
+                    .frame(width: 8, height: 8)
+            }
+            else
+            {
+                Circle()
+                    .fill(container.status.isRunning ? Color(hex: 0x4ADE80) : Color(hex: 0x555555))
+                    .frame(width: 8, height: 8)
+            }
+        }
+        .frame(width: 8, height: 8)
+    }
+
+    private var statusBadge: some View
+    {
+        let label = isPending ? "…" : container.status.rawValue
+        let isGreen = container.status.isRunning && !isPending
+
+        return Text(label)
+            .foregroundColor(isGreen ? Color(hex: 0x4ADE80) : Color.white.opacity(0.4))
+            .font(.system(size: 11, weight: .medium))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(
+                Capsule()
+                    .fill(isGreen
+                          ? Color(hex: 0x4ADE80).opacity(0.12)
+                          : Color.white.opacity(0.06))
+            )
+    }
+
+    @ViewBuilder
+    private var actions: some View
+    {
+        HStack(spacing: 4)
+        {
+            if isPending
+            {
+                Color.clear.frame(width: 28, height: 28)
+            }
+            else if container.status.isRunning
+            {
+                actionButton("stop.fill", color: Color(hex: 0xFF6B35)) { onAction(.stop) }
+                actionButton("arrow.clockwise", color: .white.opacity(0.5)) { onAction(.restart) }
+            }
+            else
+            {
+                actionButton("play.fill", color: Color(hex: 0x4ADE80)) { onAction(.start) }
+            }
+        }
     }
 
     private func actionButton(_ icon: String, color: Color, action: @escaping () -> Void) -> some View
