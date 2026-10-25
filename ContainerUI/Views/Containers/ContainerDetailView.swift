@@ -91,8 +91,8 @@ struct ContainerDetailView: View
                 {
                     switch selectedTab
                     {
-                        case 0: detailTab(detail: detail)
-                        case 1: logsTab
+                        case 0: detailTab(detail: detail).transition(.opacity)
+                        case 1: logsTab.transition(.opacity)
                         default: EmptyView()
                     }
                 }
@@ -158,7 +158,7 @@ struct ContainerDetailView: View
 
     private func tabButton(title: String, index: Int) -> some View
     {
-        Button { selectedTab = index } label:
+        Button { withAnimation(.easeInOut(duration: 0.2)) { selectedTab = index } } label:
         {
             VStack(spacing: 0)
             {

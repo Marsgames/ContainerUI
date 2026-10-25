@@ -214,7 +214,7 @@ struct AddRegistrySheet: View
         {
             Color(hex: 0x1D1D1D).ignoresSafeArea()
 
-            VStack(alignment: .leading, spacing: 16)
+            VStack(alignment: .leading, spacing: 20)
             {
                 Text("Add registry")
                     .foregroundColor(.white)
@@ -248,7 +248,7 @@ struct AddRegistrySheet: View
             }
             .padding(24)
         }
-        .frame(width: 420, height: 260)
+        .frame(width: 440, height: 300)
     }
 
     private func labeledField(_ label: String, placeholder: String, text: Binding<String>) -> some View
