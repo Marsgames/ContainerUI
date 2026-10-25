@@ -1,100 +1,74 @@
 # Feuille de route
 
-Ce document décrit le développement prévu de ContainerUI. Les jalons sont ordonnés par priorité et dépendance ; les éléments au sein d'un même jalon peuvent être traités en parallèle.
-
 > Cette feuille de route est un document vivant — les priorités peuvent évoluer au fur et à mesure que le projet grandit et que les retours de la communauté arrivent.
 
 ---
 
-## Jalon 1 — Fondations `[en cours]`
+## v0.1 — Fondations `[en cours]`
 
-Infrastructure de base et squelette de l'application.
+Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de finitions, juste les bases qui marchent.
 
 - [x] Mise en place du projet (SwiftUI, Xcode, identité visuelle sombre)
 - [x] Navigation latérale (Conteneurs, Images, Registres, Documentation, Paramètres)
 - [x] Écran de chargement avec indicateur de progression
 - [x] Détection des composants manquants et invite d'installation
 - [ ] Connexion au runtime du système de conteneurs Apple via CLI/XPC
-- [ ] Persistance de l'état de l'application entre les lancements (section active, taille de fenêtre)
+- [ ] Lister les conteneurs en cours et arrêtés
+- [ ] Démarrer / arrêter / redémarrer un conteneur
+- [ ] Lister les images locales
+- [ ] Préférences de base (persistance de l'état de la fenêtre)
 
 ---
 
-## Jalon 2 — Conteneurs
+## v0.2 — MVP
 
-Parcourir et gérer les conteneurs en cours et arrêtés.
+Le produit minimum viable : tout ce dont un utilisateur a besoin pour remplacer la ligne de commande au quotidien.
 
-- [ ] Lister tous les conteneurs avec nom, image, état et durée de fonctionnement
-- [ ] Démarrer / arrêter / redémarrer un conteneur
-- [ ] Supprimer un conteneur (avec confirmation)
 - [ ] Afficher les logs d'un conteneur (en temps réel)
 - [ ] Afficher les détails d'un conteneur (ports, montages, variables d'environnement, ressources)
-- [ ] Exécuter une commande dans un conteneur en cours (accès shell)
-
----
-
-## Jalon 3 — Images
-
-Parcourir et gérer les images locales.
-
-- [ ] Lister toutes les images locales avec nom, tag, taille et date de création
+- [ ] Supprimer un conteneur (avec confirmation)
 - [ ] Télécharger une image depuis un registre (pull)
 - [ ] Supprimer une image (avec confirmation)
-- [ ] Inspecter une image (couches, configuration, historique)
-- [ ] Construire une image depuis un Dockerfile (sélecteur de chemin + journal de build)
+- [ ] Ajouter / supprimer un registre (identifiants stockés dans le Trousseau)
+- [ ] Gestion des erreurs et messages d'erreur affichés à l'utilisateur
 
 ---
 
-## Jalon 4 — Registres
+## v1.0 — Release
 
-Se connecter à des registres de conteneurs publics et privés.
+Une version polie et distribuable du MVP. Fonctionnellement complète pour le cas d'usage principal ; prête pour la sortie publique.
 
-- [ ] Ajouter / supprimer un registre (URL, identifiants stockés dans le Trousseau)
-- [ ] Parcourir les images et tags disponibles sur un registre
-- [ ] Pousser une image locale vers un registre (push)
-- [ ] Support de Docker Hub, GitHub Container Registry et registres personnalisés
-
----
-
-## Jalon 5 — Documentation
-
-Documentation intégrée et onboarding.
-
-- [ ] Guide de démarrage rapide intégré pour le système de conteneurs Apple
+- [ ] Icône de l'application et ressources visuelles finales
+- [ ] Flux d'onboarding pour les nouveaux utilisateurs
 - [ ] Panneaux d'aide contextuelle dans chaque section
-- [ ] Liens vers la documentation officielle Apple et les ressources communautaires
-
----
-
-## Jalon 6 — Paramètres et préférences
-
-Réglages de l'application et du runtime.
-
-- [ ] Configuration du runtime (limites de ressources, registre par défaut, chemin de stockage)
-- [ ] Préférences d'apparence (couleur d'accentuation, taille de police)
-- [ ] Vue d'ensemble des raccourcis clavier
-- [ ] Vérification des mises à jour de l'application
-
----
-
-## Jalon 7 — Finitions et distribution
-
-Préparer ContainerUI pour sa sortie publique.
-
-- [ ] Icône de l'application et ressources visuelles
 - [ ] Localisation (anglais en principal, français inclus)
 - [ ] Audit d'accessibilité (VoiceOver, navigation clavier)
 - [ ] Notarisation et conformité Gatekeeper
-- [ ] Releases GitHub avec `.dmg` pré-construit
+- [ ] Release GitHub avec `.dmg` pré-construit
 - [ ] Cask Homebrew (`brew install --cask containerui`)
+
+---
+
+## v1.x — Fonctionnalités avancées
+
+Améliorations post-release, selon les retours de la communauté.
+
+- [ ] Exécuter une commande dans un conteneur en cours (accès shell)
+- [ ] Construire une image depuis un Dockerfile (sélecteur de chemin + journal de build)
+- [ ] Pousser une image locale vers un registre (push)
+- [ ] Inspecter une image (couches, configuration, historique)
+- [ ] Parcourir les images et tags disponibles sur un registre
+- [ ] Icône dans la barre de menus avec statut rapide des conteneurs
+- [ ] Notifications système (crash de conteneur, téléchargement terminé)
+- [ ] Vérification des mises à jour de l'application (intégrée)
 
 ---
 
 ## Idées futures
 
-Non planifiées, mais susceptibles d'être intégrées selon la demande :
+Non planifiées, mais à garder en tête.
 
-- Icône dans la barre de menus avec statut rapide des conteneurs
 - Support des stacks multi-conteneurs (Compose)
-- Notifications système (crash de conteneur, téléchargement d'image terminé)
 - Outil CLI compagnon (`containerui`)
 - Système de plugins / extensions
+- Préférences d'apparence (couleur d'accentuation, taille de police)
