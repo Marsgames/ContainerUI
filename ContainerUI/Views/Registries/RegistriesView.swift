@@ -84,6 +84,7 @@ struct RegistriesView: View
                 {
                     Image(systemName: "plus")
                         .foregroundColor(.white.opacity(0.7))
+                        .padding(.horizontal, 4)
                 }
                 .buttonStyle(.plain)
             }

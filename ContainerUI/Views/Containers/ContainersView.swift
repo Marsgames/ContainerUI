@@ -139,6 +139,7 @@ struct ContainersView: View
                 {
                     Image(systemName: "arrow.clockwise")
                         .foregroundColor(.white.opacity(0.7))
+                        .padding(.horizontal, 4)
                 }
                 .buttonStyle(.plain)
             }
