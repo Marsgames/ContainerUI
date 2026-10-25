@@ -16,7 +16,7 @@ Get the app running and talking to the container runtime. No polish, just workin
 - [x] List running and stopped containers
 - [x] Start / stop / restart a container
 - [x] List local images
-- [ ] Basic app preferences (window state persistence)
+- [x] Basic app preferences (window state persistence)
 
 ---
 

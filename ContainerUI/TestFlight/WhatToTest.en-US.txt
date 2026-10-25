@@ -3,6 +3,7 @@ New:
 - Containers are now listed with their status, image, and action buttons (start, stop, restart).
 - Images are listed with their repository and tag.
 - The app detects whether Apple's container runtime is installed and running, and guides you through fixing it if not.
+- The app remembers its window size and the last selected section between launches.
 
 Improved:
 - Action buttons show a spinner on their row while an operation is in progress.

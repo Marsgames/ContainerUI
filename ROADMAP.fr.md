@@ -16,7 +16,7 @@ Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de
 - [x] Lister les conteneurs en cours et arrêtés
 - [x] Démarrer / arrêter / redémarrer un conteneur
 - [x] Lister les images locales
-- [ ] Préférences de base (persistance de l'état de la fenêtre)
+- [x] Préférences de base (persistance de l'état de la fenêtre)
 
 ---
 
