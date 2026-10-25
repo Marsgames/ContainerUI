@@ -80,6 +80,13 @@ struct RegistriesView: View
         {
             ToolbarItem(placement: .automatic)
             {
+                HelpToolbarButton(
+                    title: String(localized: "help.registries.title"),
+                    helpText: String(localized: "help.registries.body")
+                )
+            }
+            ToolbarItem(placement: .automatic)
+            {
                 Button { vm.showAddSheet = true } label:
                 {
                     Image(systemName: "plus")
@@ -87,6 +94,7 @@ struct RegistriesView: View
                         .padding(.horizontal, 4)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Add registry")
             }
         }
         .sheet(isPresented: $vm.showAddSheet)

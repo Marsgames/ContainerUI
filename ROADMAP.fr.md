@@ -34,18 +34,18 @@ Le produit minimum viable : tout ce dont un utilisateur a besoin pour remplacer 
 
 ---
 
-## v1.0 — Release
+## v1.0 — Release `[en cours]`
 
 Une version polie et distribuable du MVP. Fonctionnellement complète pour le cas d'usage principal ; prête pour la sortie publique.
 
-- [ ] Icône de l'application et ressources visuelles finales
-- [ ] Flux d'onboarding pour les nouveaux utilisateurs
-- [ ] Panneaux d'aide contextuelle dans chaque section
-- [ ] Localisation (anglais en principal, français inclus)
-- [ ] Audit d'accessibilité (VoiceOver, navigation clavier)
-- [ ] Notarisation et conformité Gatekeeper
-- [ ] Release GitHub avec `.dmg` pré-construit
-- [ ] Cask Homebrew (`brew install --cask containerui`)
+- [x] Icône de l'application et ressources visuelles finales
+- [x] Flux d'onboarding pour les nouveaux utilisateurs
+- [x] Panneaux d'aide contextuelle dans chaque section
+- [x] Localisation (anglais en principal, français inclus)
+- [x] Audit d'accessibilité (VoiceOver, navigation clavier)
+- [x] Notarisation et conformité Gatekeeper
+- [x] Release GitHub avec `.dmg` pré-construit
+- [x] Cask Homebrew (`brew install --cask containerui`)
 
 ---
 

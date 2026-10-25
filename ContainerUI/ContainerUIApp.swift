@@ -22,14 +22,28 @@ private enum WindowPrefs {
 @main
 struct ContainerUIApp: App {
     @State private var appState = AppState()
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "onboardingCompleted")
     private let initialSize = WindowPrefs.savedSize
 
     var body: some Scene {
         WindowGroup {
-            ContentView(appState: appState)
-                .task { await appState.bootstrap() }
-                .onGeometryChange(for: CGSize.self, of: { $0.size })
-                { WindowPrefs.save($1) }
+            Group
+            {
+                if showOnboarding
+                {
+                    OnboardingView { showOnboarding = false }
+                        .transition(.opacity)
+                }
+                else
+                {
+                    ContentView(appState: appState)
+                        .task { await appState.bootstrap() }
+                        .onGeometryChange(for: CGSize.self, of: { $0.size })
+                        { WindowPrefs.save($1) }
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut(duration: 0.35), value: showOnboarding)
         }
         .windowStyle(.hiddenTitleBar)
         .defaultSize(width: initialSize.width, height: initialSize.height)

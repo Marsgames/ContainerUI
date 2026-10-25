@@ -135,6 +135,13 @@ struct ContainersView: View
         {
             ToolbarItem(placement: .automatic)
             {
+                HelpToolbarButton(
+                    title: String(localized: "help.containers.title"),
+                    helpText: String(localized: "help.containers.body")
+                )
+            }
+            ToolbarItem(placement: .automatic)
+            {
                 Button { Task { await vm.refresh() } } label:
                 {
                     Image(systemName: "arrow.clockwise")
@@ -142,6 +149,7 @@ struct ContainersView: View
                         .padding(.horizontal, 4)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Refresh containers")
             }
         }
         .sheet(item: $vm.selectedContainer)
@@ -280,6 +288,8 @@ struct ContainerRow: View
             }
         }
         .frame(width: 8, height: 8)
+        .accessibilityLabel(container.status.isRunning ? "Running" : "Stopped")
+        .accessibilityHidden(isPending)
     }
 
     private var statusBadge: some View
@@ -313,19 +323,19 @@ struct ContainerRow: View
             {
                 if container.status.isRunning
                 {
-                    actionButton("stop.fill", color: Color(hex: 0xFF6B35)) { onAction(.stop) }
-                    actionButton("arrow.clockwise", color: .white.opacity(0.5)) { onAction(.restart) }
+                    actionButton("stop.fill", color: Color(hex: 0xFF6B35), label: "Stop \(container.name)") { onAction(.stop) }
+                    actionButton("arrow.clockwise", color: .white.opacity(0.5), label: "Restart \(container.name)") { onAction(.restart) }
                 }
                 else
                 {
-                    actionButton("play.fill", color: Color(hex: 0x4ADE80)) { onAction(.start) }
+                    actionButton("play.fill", color: Color(hex: 0x4ADE80), label: "Start \(container.name)") { onAction(.start) }
                 }
-                actionButton("trash", color: .white.opacity(0.35)) { onAction(.delete) }
+                actionButton("trash", color: .white.opacity(0.35), label: "Delete \(container.name)") { onAction(.delete) }
             }
         }
     }
 
-    private func actionButton(_ icon: String, color: Color, action: @escaping () -> Void) -> some View
+    private func actionButton(_ icon: String, color: Color, label: String, action: @escaping () -> Void) -> some View
     {
         Button(action: action)
         {
@@ -337,5 +347,6 @@ struct ContainerRow: View
                 .cornerRadius(6)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(label)
     }
 }

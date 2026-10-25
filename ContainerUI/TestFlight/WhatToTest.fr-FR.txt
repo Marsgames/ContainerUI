@@ -1,3 +1,16 @@
+---------- 1.0 ----------
+Nouveautés :
+- Des écrans d'onboarding apparaissent au premier lancement (3 étapes, "Commencer" les termine).
+- Des popovers d'aide contextuelle dans chaque section via le bouton ? dans la barre d'outils.
+- L'icône de l'application est maintenant définie.
+
+Améliorations :
+- Localisation française ajoutée dans toute l'application.
+- Labels d'accessibilité sur tous les boutons d'action et indicateurs de statut.
+
+Sous le capot :
+- Hardened Runtime, workflow de release GitHub Actions, gabarit de cask Homebrew.
+
 ---------- 0.2 ----------
 Nouveautés :
 - Appuyer sur un conteneur ouvre une fiche de détail (ressources, variables d'environnement, montages, et un onglet Logs).

@@ -34,18 +34,18 @@ The minimum viable product: everything a user needs to replace the command line 
 
 ---
 
-## v1.0 — Release
+## v1.0 — Release `[in progress]`
 
 A polished, distributable version of the MVP. Feature-complete for the core use case; ready for public release.
 
-- [ ] App icon and final branding assets
-- [ ] Onboarding flow for first-time users
-- [ ] Contextual help panels in each section
-- [ ] Localisation (English primary, French included)
-- [ ] Accessibility audit (VoiceOver, keyboard navigation)
-- [ ] Notarisation and Gatekeeper compliance
-- [ ] GitHub Release with pre-built `.dmg`
-- [ ] Homebrew cask (`brew install --cask containerui`)
+- [x] App icon and final branding assets
+- [x] Onboarding flow for first-time users
+- [x] Contextual help panels in each section
+- [x] Localisation (English primary, French included)
+- [x] Accessibility audit (VoiceOver, keyboard navigation)
+- [x] Notarisation and Gatekeeper compliance
+- [x] GitHub Release with pre-built `.dmg`
+- [x] Homebrew cask (`brew install --cask containerui`)
 
 ---
 

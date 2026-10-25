@@ -106,6 +106,13 @@ struct ImagesView: View
         {
             ToolbarItem(placement: .automatic)
             {
+                HelpToolbarButton(
+                    title: String(localized: "help.images.title"),
+                    helpText: String(localized: "help.images.body")
+                )
+            }
+            ToolbarItem(placement: .automatic)
+            {
                 Button { Task { await vm.refresh() } } label:
                 {
                     Image(systemName: "arrow.clockwise")
@@ -113,6 +120,7 @@ struct ImagesView: View
                         .padding(.horizontal, 4)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Refresh images")
             }
             ToolbarItem(placement: .automatic)
             {
@@ -123,6 +131,7 @@ struct ImagesView: View
                         .padding(.horizontal, 4)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Pull image")
             }
         }
         .sheet(isPresented: $vm.showPullSheet)
