@@ -1,74 +1,92 @@
 import SwiftUI
 
-@MainActor @Observable
-final class ImagesViewModel {
+@Observable @MainActor
+final class ImagesViewModel
+{
     var images: [ContainerImage] = []
     var isLoading = false
     var error: String?
 
-    let service: ContainerService
+    private let repository: any IImageRepository
 
-    init(service: ContainerService) {
-        self.service = service
+    init(repository: any IImageRepository)
+    {
+        self.repository = repository
     }
 
-    func refresh() async {
+    func refresh() async
+    {
         isLoading = true
         error = nil
-        do {
-            images = try await service.listImages()
-        } catch {
-            self.error = error.localizedDescription
+        do
+        {
+            images = try await repository.listAll()
+        }
+        catch
+        {
+            self.error = Errors.CLIMapper.map(error).userMessage
         }
         isLoading = false
     }
 }
 
-struct ImagesView: View {
+struct ImagesView: View
+{
     @State private var vm: ImagesViewModel
 
-    init(service: ContainerService) {
-        _vm = State(wrappedValue: ImagesViewModel(service: service))
+    init(repository: any IImageRepository)
+    {
+        _vm = State(wrappedValue: ImagesViewModel(repository: repository))
     }
 
-    var body: some View {
-        ZStack {
+    var body: some View
+    {
+        ZStack
+        {
             Color(hex: 0x242424).ignoresSafeArea()
 
-            if vm.isLoading && vm.images.isEmpty {
+            if vm.isLoading && vm.images.isEmpty
+            {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .tint(Color(hex: 0x4ADE80))
-            } else if vm.images.isEmpty {
+            }
+            else if vm.images.isEmpty
+            {
                 emptyState
-            } else {
+            }
+            else
+            {
                 imageList
             }
         }
         .task { await vm.refresh() }
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button {
-                    Task { await vm.refresh() }
-                } label: {
+        .toolbar
+        {
+            ToolbarItem(placement: .automatic)
+            {
+                Button { Task { await vm.refresh() } } label:
+                {
                     Image(systemName: "arrow.clockwise")
                         .foregroundColor(.white.opacity(0.7))
                 }
                 .buttonStyle(.plain)
             }
         }
-        .if(vm.error != nil) { view in
-            view.overlay(alignment: .bottom) {
-                ErrorBanner(message: vm.error!) {
-                    vm.error = nil
-                }
-                .padding()
+        .if(vm.error != nil)
+        { view in
+            view.overlay(alignment: .bottom)
+            {
+                ErrorBanner(message: vm.error!) { vm.error = nil }
+                    .padding()
             }
         }
     }
 
-    private var emptyState: some View {
-        VStack(spacing: 12) {
+    private var emptyState: some View
+    {
+        VStack(spacing: 12)
+        {
             Image(systemName: "photo.on.rectangle")
                 .font(.system(size: 40, weight: .thin))
                 .foregroundColor(.white.opacity(0.3))
@@ -78,29 +96,34 @@ struct ImagesView: View {
         }
     }
 
-    private var imageList: some View {
-        ScrollView {
-            LazyVStack(spacing: 1) {
-                ForEach(vm.images) { image in
-                    ImageRow(image: image)
-                }
+    private var imageList: some View
+    {
+        ScrollView
+        {
+            LazyVStack(spacing: 1)
+            {
+                ForEach(vm.images) { image in ImageRow(image: image) }
             }
             .padding(.top, 1)
         }
     }
 }
 
-struct ImageRow: View {
+struct ImageRow: View
+{
     let image: ContainerImage
 
-    var body: some View {
-        HStack(spacing: 14) {
+    var body: some View
+    {
+        HStack(spacing: 14)
+        {
             Image(systemName: "photo.on.rectangle")
                 .font(.system(size: 14, weight: .light))
                 .foregroundColor(.white.opacity(0.5))
                 .frame(width: 22)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 2)
+            {
                 Text(image.name)
                     .foregroundColor(.white)
                     .font(.system(size: 13, weight: .medium))
@@ -111,7 +134,8 @@ struct ImageRow: View {
 
             Spacer()
 
-            if let size = image.size {
+            if let size = image.size
+            {
                 Text(ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file))
                     .foregroundColor(.white.opacity(0.4))
                     .font(.system(size: 11))

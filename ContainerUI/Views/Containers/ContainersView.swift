@@ -1,101 +1,131 @@
 import SwiftUI
 
-@MainActor @Observable
-final class ContainersViewModel {
+@Observable @MainActor
+final class ContainersViewModel
+{
     var containers: [Container] = []
     var isLoading = false
     var error: String?
 
-    let service: ContainerService
+    private let repository: any IContainerRepository
 
-    init(service: ContainerService) {
-        self.service = service
+    init(repository: any IContainerRepository)
+    {
+        self.repository = repository
     }
 
-    func refresh() async {
+    func refresh() async
+    {
         isLoading = true
         error = nil
-        do {
-            containers = try await service.listContainers(all: true)
-        } catch {
-            self.error = error.localizedDescription
+        do
+        {
+            containers = try await repository.listAll()
+        }
+        catch
+        {
+            self.error = Errors.CLIMapper.map(error).userMessage
         }
         isLoading = false
     }
 
-    func start(_ container: Container) async {
-        do {
-            try await service.startContainer(container.id)
+    func start(_ container: Container) async
+    {
+        do
+        {
+            try await repository.start(containerID: container.id)
             await refresh()
-        } catch {
-            self.error = error.localizedDescription
+        }
+        catch
+        {
+            self.error = Errors.CLIMapper.map(error).userMessage
         }
     }
 
-    func stop(_ container: Container) async {
-        do {
-            try await service.stopContainer(container.id)
+    func stop(_ container: Container) async
+    {
+        do
+        {
+            try await repository.stop(containerID: container.id)
             await refresh()
-        } catch {
-            self.error = error.localizedDescription
+        }
+        catch
+        {
+            self.error = Errors.CLIMapper.map(error).userMessage
         }
     }
 
-    func restart(_ container: Container) async {
-        do {
-            try await service.restartContainer(container.id)
+    func restart(_ container: Container) async
+    {
+        do
+        {
+            try await repository.restart(containerID: container.id)
             await refresh()
-        } catch {
-            self.error = error.localizedDescription
+        }
+        catch
+        {
+            self.error = Errors.CLIMapper.map(error).userMessage
         }
     }
 }
 
-struct ContainersView: View {
+struct ContainersView: View
+{
     @State private var vm: ContainersViewModel
 
-    init(service: ContainerService) {
-        _vm = State(wrappedValue: ContainersViewModel(service: service))
+    init(repository: any IContainerRepository)
+    {
+        _vm = State(wrappedValue: ContainersViewModel(repository: repository))
     }
 
-    var body: some View {
-        ZStack {
+    var body: some View
+    {
+        ZStack
+        {
             Color(hex: 0x242424).ignoresSafeArea()
 
-            if vm.isLoading && vm.containers.isEmpty {
+            if vm.isLoading && vm.containers.isEmpty
+            {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .tint(Color(hex: 0x4ADE80))
-            } else if vm.containers.isEmpty {
+            }
+            else if vm.containers.isEmpty
+            {
                 emptyState
-            } else {
+            }
+            else
+            {
                 containerList
             }
         }
         .task { await vm.refresh() }
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button {
-                    Task { await vm.refresh() }
-                } label: {
+        .toolbar
+        {
+            ToolbarItem(placement: .automatic)
+            {
+                Button { Task { await vm.refresh() } } label:
+                {
                     Image(systemName: "arrow.clockwise")
                         .foregroundColor(.white.opacity(0.7))
                 }
                 .buttonStyle(.plain)
             }
         }
-        .if(vm.error != nil) { view in
-            view.overlay(alignment: .bottom) {
-                ErrorBanner(message: vm.error!) {
-                    vm.error = nil
-                }
-                .padding()
+        .if(vm.error != nil)
+        { view in
+            view.overlay(alignment: .bottom)
+            {
+                ErrorBanner(message: vm.error!) { vm.error = nil }
+                    .padding()
             }
         }
     }
 
-    private var emptyState: some View {
-        VStack(spacing: 12) {
+    private var emptyState: some View
+    {
+        VStack(spacing: 12)
+        {
             Image(systemName: "shippingbox")
                 .font(.system(size: 40, weight: .thin))
                 .foregroundColor(.white.opacity(0.3))
@@ -105,16 +135,23 @@ struct ContainersView: View {
         }
     }
 
-    private var containerList: some View {
-        ScrollView {
-            LazyVStack(spacing: 1) {
-                ForEach(vm.containers) { container in
-                    ContainerRow(container: container) { action in
-                        Task {
-                            switch action {
-                            case .start:   await vm.start(container)
-                            case .stop:    await vm.stop(container)
-                            case .restart: await vm.restart(container)
+    private var containerList: some View
+    {
+        ScrollView
+        {
+            LazyVStack(spacing: 1)
+            {
+                ForEach(vm.containers)
+                { container in
+                    ContainerRow(container: container)
+                    { action in
+                        Task
+                        {
+                            switch action
+                            {
+                                case .start:   await vm.start(container)
+                                case .stop:    await vm.stop(container)
+                                case .restart: await vm.restart(container)
                             }
                         }
                     }
@@ -127,17 +164,21 @@ struct ContainersView: View {
 
 enum ContainerAction { case start, stop, restart }
 
-struct ContainerRow: View {
+struct ContainerRow: View
+{
     let container: Container
     let onAction: (ContainerAction) -> Void
 
-    var body: some View {
-        HStack(spacing: 14) {
+    var body: some View
+    {
+        HStack(spacing: 14)
+        {
             Circle()
                 .fill(container.status.isRunning ? Color(hex: 0x4ADE80) : Color(hex: 0x555555))
                 .frame(width: 8, height: 8)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 2)
+            {
                 Text(container.name)
                     .foregroundColor(.white)
                     .font(.system(size: 13, weight: .medium))
@@ -155,14 +196,20 @@ struct ContainerRow: View {
                 .padding(.vertical, 3)
                 .background(
                     Capsule()
-                        .fill(container.status.isRunning ? Color(hex: 0x4ADE80).opacity(0.12) : Color.white.opacity(0.06))
+                        .fill(container.status.isRunning
+                              ? Color(hex: 0x4ADE80).opacity(0.12)
+                              : Color.white.opacity(0.06))
                 )
 
-            HStack(spacing: 4) {
-                if container.status.isRunning {
+            HStack(spacing: 4)
+            {
+                if container.status.isRunning
+                {
                     actionButton("stop.fill", color: Color(hex: 0xFF6B35)) { onAction(.stop) }
                     actionButton("arrow.clockwise", color: .white.opacity(0.5)) { onAction(.restart) }
-                } else {
+                }
+                else
+                {
                     actionButton("play.fill", color: Color(hex: 0x4ADE80)) { onAction(.start) }
                 }
             }
@@ -172,8 +219,10 @@ struct ContainerRow: View {
         .background(Color(hex: 0x2A2A2A))
     }
 
-    private func actionButton(_ icon: String, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+    private func actionButton(_ icon: String, color: Color, action: @escaping () -> Void) -> some View
+    {
+        Button(action: action)
+        {
             Image(systemName: icon)
                 .font(.system(size: 11))
                 .foregroundColor(color)
