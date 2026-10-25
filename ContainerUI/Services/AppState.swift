@@ -2,10 +2,18 @@ import SwiftUI
 import Observation
 import OSLog
 
+enum MissingComponentsReason: Equatable
+{
+    /// The `container` CLI was not found on disk — the whole system needs to be installed.
+    case cliNotFound
+    /// The CLI is present but the XPC daemon is not running — `container system start` can fix it.
+    case runtimeNotRunning
+}
+
 enum StartupPhase: Equatable
 {
     case loading(message: String, progress: Double)
-    case missingComponents
+    case missingComponents(reason: MissingComponentsReason)
     case installingComponents
     case ready
     case failed(message: String)
@@ -36,7 +44,7 @@ final class AppState
     {
         guard cli.isExecutableAvailable else
         {
-            await set(.missingComponents)
+            await set(.missingComponents(reason: .cliNotFound))
             return
         }
 
@@ -52,7 +60,7 @@ final class AppState
         }
         else
         {
-            await set(.missingComponents)
+            await set(.missingComponents(reason: .runtimeNotRunning))
         }
     }
 

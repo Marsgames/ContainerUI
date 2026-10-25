@@ -21,17 +21,31 @@ struct ContentView: View
                 LoadingView(message: message, progress: progress)
                     .frame(minWidth: 720, minHeight: 440)
 
-            case .missingComponents:
+            case .missingComponents(let reason):
                 MissingComponentsView(
+                    reason: reason,
                     isInstalling: false,
-                    onInstall: { Task { await appState.installComponents() } },
+                    onInstall: {
+                        switch reason
+                        {
+                            case .cliNotFound:
+                                NSWorkspace.shared.open(URL(string: "https://developer.apple.com/documentation/virtualization")!)
+                            case .runtimeNotRunning:
+                                Task { await appState.installComponents() }
+                        }
+                    },
                     onQuit: { appState.quit() }
                 )
                 .frame(minWidth: 720, minHeight: 440)
 
             case .installingComponents:
-                MissingComponentsView(isInstalling: true, onInstall: {}, onQuit: {})
-                    .frame(minWidth: 720, minHeight: 440)
+                MissingComponentsView(
+                    reason: .runtimeNotRunning,
+                    isInstalling: true,
+                    onInstall: {},
+                    onQuit: {}
+                )
+                .frame(minWidth: 720, minHeight: 440)
 
             case .ready:
                 mainLayout
