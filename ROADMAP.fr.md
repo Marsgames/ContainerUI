@@ -4,7 +4,7 @@
 
 ---
 
-## v0.1 — Fondations `[en cours]`
+## v0.1 — Fondations ✓
 
 Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de finitions, juste les bases qui marchent.
 
@@ -12,7 +12,7 @@ Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de
 - [x] Navigation latérale (Conteneurs, Images, Registres, Documentation, Paramètres)
 - [x] Écran de chargement avec indicateur de progression
 - [x] Détection des composants manquants et invite d'installation
-- [x] Connexion au runtime du système de conteneurs Apple via CLI/XPC
+- [x] Connexion au runtime du système de conteneurs Apple via CLI
 - [x] Lister les conteneurs en cours et arrêtés
 - [x] Démarrer / arrêter / redémarrer un conteneur
 - [x] Lister les images locales
@@ -20,7 +20,7 @@ Faire fonctionner l'application et la connecter au runtime de conteneurs. Pas de
 
 ---
 
-## v0.2 — MVP `[en cours]`
+## v0.2 — MVP ✓
 
 Le produit minimum viable : tout ce dont un utilisateur a besoin pour remplacer la ligne de commande au quotidien.
 
@@ -34,7 +34,7 @@ Le produit minimum viable : tout ce dont un utilisateur a besoin pour remplacer 
 
 ---
 
-## v1.0 — Release `[en cours]`
+## v1.0 — Release ✓
 
 Une version polie et distribuable du MVP. Fonctionnellement complète pour le cas d'usage principal ; prête pour la sortie publique.
 
@@ -53,14 +53,47 @@ Une version polie et distribuable du MVP. Fonctionnellement complète pour le ca
 
 Améliorations post-release, selon les retours de la communauté.
 
+**Conteneurs**
+- [ ] Lancer un nouveau conteneur depuis une image — GUI pour `container run` (nom, ports, volumes, variables d'env)
+- [ ] Monitoring des ressources en temps réel par conteneur (CPU, mémoire)
 - [ ] Exécuter une commande dans un conteneur en cours (accès shell)
-- [ ] Construire une image depuis un Dockerfile (sélecteur de chemin + journal de build)
+- [ ] Renommer un conteneur
+- [ ] Exporter / importer un conteneur (`save` / `load`)
+- [ ] Filtrage des logs et recherche texte
+
+**Images**
+- [ ] Construire une image depuis un Dockerfile (sélecteur de chemin + journal de build en direct)
 - [ ] Pousser une image locale vers un registre (push)
 - [ ] Inspecter une image (couches, configuration, historique)
+- [ ] Tagger une image localement
+- [ ] Nettoyer les images inutilisées avec aperçu de l'espace libéré
+
+**Volumes**
+- [ ] Liste des volumes (créer, supprimer, inspecter)
+- [ ] Statistiques d'utilisation disque par volume
+
+**Registres**
 - [ ] Parcourir les images et tags disponibles sur un registre
-- [ ] Icône dans la barre de menus avec statut rapide des conteneurs
+
+**macOS**
+- [ ] Icône dans la barre de menus avec statut rapide et actions (démarrer/arrêter)
 - [ ] Notifications système (crash de conteneur, téléchargement terminé)
 - [ ] Vérification des mises à jour de l'application (intégrée)
+
+---
+
+## v2.x — Intégrations et fonctionnalités avancées
+
+Intégration macOS approfondie et outils pour utilisateurs avancés.
+
+- [ ] Support de Shortcuts.app (démarrer/arrêter des conteneurs depuis des automatisations)
+- [ ] Intégration Spotlight (rechercher des conteneurs et images depuis ⌘Espace)
+- [ ] Gestion des réseaux (créer, supprimer, lister les conteneurs attachés)
+- [ ] Visualisation des ports exposés par conteneur
+- [ ] Export d'un conteneur en Dockerfile / snippet compose
+- [ ] Préférences : intervalle d'auto-refresh, registre par défaut, raccourcis clavier
+- [ ] Thème de couleur d'accentuation (vert, bleu, orange…)
+- [ ] Support multi-fenêtres
 
 ---
 
@@ -69,6 +102,7 @@ Améliorations post-release, selon les retours de la communauté.
 Non planifiées, mais à garder en tête.
 
 - Support des stacks multi-conteneurs (Compose)
-- Outil CLI compagnon (`containerui`)
+- Éditeur de Dockerfile intégré avec lint et coloration syntaxique
+- Scan de vulnérabilités des images
 - Système de plugins / extensions
-- Préférences d'apparence (couleur d'accentuation, taille de police)
+- Outil CLI compagnon (`containerui`)

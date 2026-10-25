@@ -4,7 +4,7 @@
 
 ---
 
-## v0.1 — Foundation `[in progress]`
+## v0.1 — Foundation ✓
 
 Get the app running and talking to the container runtime. No polish, just working fundamentals.
 
@@ -12,7 +12,7 @@ Get the app running and talking to the container runtime. No polish, just workin
 - [x] Side panel navigation (Containers, Images, Registries, Documentation, Parameters)
 - [x] Loading screen with progress indicator
 - [x] Missing-components detection and install prompt
-- [x] Connect to Apple's container system runtime via CLI/XPC
+- [x] Connect to Apple's container system runtime via CLI
 - [x] List running and stopped containers
 - [x] Start / stop / restart a container
 - [x] List local images
@@ -20,7 +20,7 @@ Get the app running and talking to the container runtime. No polish, just workin
 
 ---
 
-## v0.2 — MVP `[in progress]`
+## v0.2 — MVP ✓
 
 The minimum viable product: everything a user needs to replace the command line for day-to-day container work.
 
@@ -34,7 +34,7 @@ The minimum viable product: everything a user needs to replace the command line 
 
 ---
 
-## v1.0 — Release `[in progress]`
+## v1.0 — Release ✓
 
 A polished, distributable version of the MVP. Feature-complete for the core use case; ready for public release.
 
@@ -53,14 +53,47 @@ A polished, distributable version of the MVP. Feature-complete for the core use 
 
 Post-release improvements, tackled based on community demand.
 
+**Containers**
+- [ ] Run a new container from an image — GUI for `container run` (name, ports, volumes, environment variables)
+- [ ] Real-time resource monitoring per container (CPU usage, memory)
 - [ ] Execute a command inside a running container (shell access)
-- [ ] Build an image from a Dockerfile (path picker + build log)
+- [ ] Rename a container
+- [ ] Export / import a container (`save` / `load`)
+- [ ] Log filtering and text search
+
+**Images**
+- [ ] Build an image from a Dockerfile (path picker + live build log)
 - [ ] Push a local image to a registry
 - [ ] Inspect an image (layers, config, history)
-- [ ] Browse a registry's available images and tags
-- [ ] Menu-bar icon with quick container status
-- [ ] System notifications (container crash, image pull complete)
+- [ ] Tag an image locally
+- [ ] Prune unused images with disk-space preview
+
+**Volumes**
+- [ ] Volume list (create, delete, inspect)
+- [ ] Per-volume disk usage statistics
+
+**Registries**
+- [ ] Browse available images and tags on a registry
+
+**macOS**
+- [ ] Menu-bar icon with quick container status and start/stop actions
+- [ ] System notifications (container crash, pull complete)
 - [ ] Check for app updates (in-app)
+
+---
+
+## v2.x — Integrations & Power Features
+
+Deeper macOS integration and power-user tooling.
+
+- [ ] Shortcuts.app support (start/stop containers from automations)
+- [ ] Spotlight integration (search containers and images from ⌘Space)
+- [ ] Network management (create, delete, list attached containers)
+- [ ] Port mapping visualisation per container
+- [ ] Container export to Dockerfile / compose snippet
+- [ ] Preferences: auto-refresh interval, default registry, keyboard shortcuts
+- [ ] Accent colour theme (green, blue, orange…)
+- [ ] Multi-window support
 
 ---
 
@@ -69,6 +102,7 @@ Post-release improvements, tackled based on community demand.
 Not scheduled, but worth tracking.
 
 - Compose / multi-container stacks support
-- CLI companion tool (`containerui`)
+- Dockerfile editor with lint and syntax highlighting
+- Image vulnerability scanning
 - Plugin / extension system
-- Appearance preferences (accent color, font size)
+- CLI companion tool (`containerui`)
