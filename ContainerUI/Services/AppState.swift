@@ -46,7 +46,7 @@ final class AppState
     {
         guard cli.isExecutableAvailable else
         {
-            await set(.missingComponents(reason: .cliNotFound))
+            set(.missingComponents(reason: .cliNotFound))
             return
         }
 
@@ -54,41 +54,41 @@ final class AppState
 
         if let reason = await checkHealth()
         {
-            await set(.missingComponents(reason: reason))
+            set(.missingComponents(reason: reason))
         }
         else
         {
-            await set(.loading(message: "Ready", progress: 1))
+            set(.loading(message: "Ready", progress: 1))
             try? await Task.sleep(for: .milliseconds(300))
-            await set(.ready)
+            set(.ready)
         }
     }
 
     func installComponents() async
     {
-        await set(.installingComponents)
+        set(.installingComponents)
         await set(.loading(message: "Starting container services…", progress: 0.3))
 
         do
         {
-            try await cli.run(command: CLI.SystemCommand.start)
+            try await cli.run(["system", "start"])
             await set(.loading(message: "Verifying…", progress: 0.8))
             try? await Task.sleep(for: .seconds(1))
 
             if let reason = await checkHealth()
             {
-                await set(.missingComponents(reason: reason))
+                set(.missingComponents(reason: reason))
             }
             else
             {
                 await set(.loading(message: "Ready", progress: 1))
                 try? await Task.sleep(for: .milliseconds(300))
-                await set(.ready)
+                set(.ready)
             }
         }
         catch
         {
-            await set(.failed(message: Errors.CLIMapper.map(error).userMessage))
+            set(.failed(message: Errors.CLIMapper.map(error).userMessage))
         }
     }
 
@@ -106,7 +106,7 @@ private extension AppState
     {
         do
         {
-            let _: String = try await cli.run(command: CLI.SystemCommand.healthCheck)
+            try await cli.run(["list", "--format", "json"])
             return nil
         }
         catch Errors.CLI.executableNotFound

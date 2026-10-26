@@ -5,17 +5,11 @@ import OSLog
 final class RegistryRepository: IRegistryRepository
 {
     private let cli: CLIClient
-    private static let log = Logger(subsystem: "ContainerUI", category: "RegistryRepository")
-    private let log: Logger = { RegistryRepository.log }()
+    private let log = Logger(subsystem: "ContainerUI", category: "RegistryRepository")
 
     private static let keychainService = "ContainerUI.registries"
 
-    init(cli: CLIClient)
-    {
-        self.cli = cli
-    }
-
-    // MARK: - IRegistryRepository
+    init(cli: CLIClient) { self.cli = cli }
 
     func listAll() -> [Registry]
     {
@@ -24,18 +18,21 @@ final class RegistryRepository: IRegistryRepository
 
     func login(server: String, username: String, password: String) async throws
     {
-        try await cli.run(command: CLI.RegistryCommand.login(server: server, username: username, password: password))
+        try await cli.run(
+            ["registry", "login", "--username", username, "--password-stdin", server],
+            stdin: password
+        )
         saveToKeychain(server: server, username: username, password: password)
     }
 
     func logout(server: String) async throws
     {
-        try await cli.run(command: CLI.RegistryCommand.logout(server: server))
+        try await cli.run(["registry", "logout", server])
         deleteFromKeychain(server: server)
     }
 }
 
-// MARK: - Keychain helpers
+// MARK: - Keychain
 
 private extension RegistryRepository
 {
@@ -49,8 +46,9 @@ private extension RegistryRepository
         ]
 
         var result: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-        guard status == errSecSuccess, let items = result as? [[String: Any]] else { return [] }
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let items = result as? [[String: Any]]
+        else { return [] }
 
         return items.compactMap { item -> Registry? in
             guard let server   = item[kSecAttrAccount as String] as? String,
@@ -63,7 +61,6 @@ private extension RegistryRepository
     func saveToKeychain(server: String, username: String, password: String)
     {
         guard let passwordData = password.data(using: .utf8) else { return }
-
         let query: [String: Any] = [
             kSecClass as String:       kSecClassGenericPassword,
             kSecAttrService as String: Self.keychainService,
@@ -71,13 +68,9 @@ private extension RegistryRepository
             kSecAttrLabel as String:   username,
             kSecValueData as String:   passwordData
         ]
-
         SecItemDelete(query as CFDictionary)
         let status = SecItemAdd(query as CFDictionary, nil)
-        if status != errSecSuccess
-        {
-            log.error("Keychain save failed for \(server): \(status)")
-        }
+        if status != errSecSuccess { log.error("Keychain save failed for \(server): \(status)") }
     }
 
     func deleteFromKeychain(server: String)

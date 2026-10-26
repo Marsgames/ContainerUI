@@ -29,7 +29,7 @@ struct ContentView: View
                         switch reason
                         {
                             case .cliNotFound:
-                                NSWorkspace.shared.open(URL(string: "https://developer.apple.com/documentation/virtualization")!)
+                                NSWorkspace.shared.open(URL(string: "https://github.com/apple/container#initial-install")!)
                             case .runtimeNotRunning:
                                 Task { await appState.installComponents() }
                         }

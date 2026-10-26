@@ -4,25 +4,20 @@ final class ImageRepository: IImageRepository
 {
     private let cli: CLIClient
 
-    init(cli: CLIClient)
-    {
-        self.cli = cli
-    }
-
-    // MARK: - IImageRepository
+    init(cli: CLIClient) { self.cli = cli }
 
     func listAll() async throws -> [ContainerImage]
     {
-        return try await cli.run(command: CLI.ImageCommand.listAll)
+        try await cli.run(["images", "list", "--format", "json"])
     }
 
     func pull(reference: String) async throws
     {
-        try await cli.run(command: CLI.ImageCommand.pull(reference: reference))
+        try await cli.run(["images", "pull", reference])
     }
 
     func delete(reference: String) async throws
     {
-        try await cli.run(command: CLI.ImageCommand.delete(reference: reference))
+        try await cli.run(["images", "delete", reference])
     }
 }
