@@ -36,7 +36,7 @@ struct ContainerUIApp: App {
                 }
                 else
                 {
-                    ContentView(appState: appState)
+                    HomeView(appState: appState)
                         .task { await appState.bootstrap() }
                         .onGeometryChange(for: CGSize.self, of: { $0.size })
                         { WindowPrefs.save($1) }

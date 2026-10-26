@@ -32,7 +32,7 @@ final class ContainerRepository: IContainerRepository
 
     func stop(containerID: String) async throws
     {
-        try await cli.run(["stop", containerID])
+        _ = try await cli.run(["stop", containerID])
     }
 
     func restart(containerID: String) async throws
