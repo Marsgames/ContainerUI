@@ -347,3 +347,9 @@ struct PullImageSheet: View
         .frame(width: 420, height: 180)
     }
 }
+
+#Preview
+{
+    ImagesView(repository: MockImageRepository())
+        .frame(width: 800, height: 500)
+}

@@ -326,3 +326,14 @@ struct ContainerDetailView: View
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
+
+#Preview
+{
+    let container = MockData.containers[0]
+    ContainerDetailView(
+        containerID: container.id,
+        containerName: container.name,
+        repository: MockContainerRepository()
+    )
+    .frame(width: 700, height: 520)
+}

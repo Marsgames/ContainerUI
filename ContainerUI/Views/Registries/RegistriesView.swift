@@ -294,3 +294,9 @@ struct AddRegistrySheet: View
         }
     }
 }
+
+#Preview
+{
+    RegistriesView(repository: MockRegistryRepository())
+        .frame(width: 800, height: 500)
+}

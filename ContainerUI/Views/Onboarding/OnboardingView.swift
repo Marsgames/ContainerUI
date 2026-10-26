@@ -139,3 +139,9 @@ private struct OnboardingStep
     let body: String
     let accentColor: Color
 }
+
+#Preview
+{
+    OnboardingView(onFinish: {})
+        .frame(width: 960, height: 540)
+}

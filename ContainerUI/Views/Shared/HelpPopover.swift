@@ -47,3 +47,21 @@ struct HelpToolbarButton: View
         }
     }
 }
+
+#Preview("HelpPopover")
+{
+    HelpPopover(
+        title: "Containers",
+        helpText: "This list shows all containers on your system — running and stopped.\n\n• Tap a row to inspect details and logs.\n• Use ▶ to start, ■ to stop, ↺ to restart."
+    )
+}
+
+#Preview("HelpToolbarButton")
+{
+    HelpToolbarButton(
+        title: "Images",
+        helpText: "Local images pulled from a registry or built from a Dockerfile."
+    )
+    .padding()
+    .background(Color(hex: 0x1D1D1D))
+}

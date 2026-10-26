@@ -30,3 +30,11 @@ struct ErrorBanner: View {
         )
     }
 }
+
+#Preview
+{
+    ErrorBanner(message: "Failed to connect to container runtime.", onDismiss: {})
+        .padding()
+        .background(Color(hex: 0x242424))
+        .frame(width: 600)
+}

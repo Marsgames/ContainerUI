@@ -350,3 +350,9 @@ struct ContainerRow: View
         .accessibilityLabel(label)
     }
 }
+
+#Preview
+{
+    ContainersView(repository: MockContainerRepository())
+        .frame(width: 800, height: 500)
+}
