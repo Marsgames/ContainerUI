@@ -52,17 +52,15 @@ final class AppState
 
         await set(.loading(message: "Connecting to container runtime…", progress: 0.4))
 
-        let isHealthy = await checkHealth()
-
-        if isHealthy
+        if let reason = await checkHealth()
+        {
+            await set(.missingComponents(reason: reason))
+        }
+        else
         {
             await set(.loading(message: "Ready", progress: 1))
             try? await Task.sleep(for: .milliseconds(300))
             await set(.ready)
-        }
-        else
-        {
-            await set(.missingComponents(reason: .runtimeNotRunning))
         }
     }
 
@@ -77,17 +75,15 @@ final class AppState
             await set(.loading(message: "Verifying…", progress: 0.8))
             try? await Task.sleep(for: .seconds(1))
 
-            let isHealthy = await checkHealth()
-
-            if isHealthy
+            if let reason = await checkHealth()
+            {
+                await set(.missingComponents(reason: reason))
+            }
+            else
             {
                 await set(.loading(message: "Ready", progress: 1))
                 try? await Task.sleep(for: .milliseconds(300))
                 await set(.ready)
-            }
-            else
-            {
-                await set(.failed(message: "Runtime started but is not responding."))
             }
         }
         catch
@@ -106,16 +102,20 @@ final class AppState
 
 private extension AppState
 {
-    func checkHealth() async -> Bool
+    func checkHealth() async -> MissingComponentsReason?
     {
         do
         {
             let _: String = try await cli.run(command: CLI.SystemCommand.healthCheck)
-            return true
+            return nil
+        }
+        catch Errors.CLI.executableNotFound
+        {
+            return .cliNotFound
         }
         catch
         {
-            return false
+            return .runtimeNotRunning
         }
     }
 

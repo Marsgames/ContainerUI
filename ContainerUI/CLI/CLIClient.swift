@@ -57,7 +57,12 @@ extension CLIClient
             catch
             {
                 log.error("✗ \(command.name) process launch failed: \(error)")
-                continuation.resume(throwing: Errors.CLI.unknown(error))
+                let nsErr = error as NSError
+                if nsErr.domain == NSCocoaErrorDomain && nsErr.code == NSFileNoSuchFileError {
+                    continuation.resume(throwing: Errors.CLI.executableNotFound)
+                } else {
+                    continuation.resume(throwing: Errors.CLI.unknown(error))
+                }
                 return
             }
 
