@@ -52,7 +52,9 @@ struct CLIClient
                 }
             }
 
-            do { try process.run() }
+            do {
+                try process.run()
+            }
             catch
             {
                 log.error("✗ \(label) process launch failed: \(error)")
@@ -89,7 +91,7 @@ struct CLIClient
 
     func run<T: Decodable>(_ arguments: [String]) async throws -> T
     {
-        let output: String = try await run(arguments)
+        let output: String = try await run(arguments, stdin: nil)
 
         do
         {
