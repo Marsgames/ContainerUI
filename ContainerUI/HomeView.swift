@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View
+struct HomeView: View
 {
     var appState: AppState
     @AppStorage("selectedSection") private var selectedSectionRaw: String = SidebarSection.containers.rawValue
@@ -106,4 +106,35 @@ struct ComingSoonView: View
                 .font(.system(size: 12))
         }
     }
+}
+
+#Preview("HomeView — ready")
+{
+    let state = AppState()
+    state.phase = .ready
+    return HomeView(appState: state)
+        .frame(width: 960, height: 600)
+}
+
+#Preview("HomeView — loading")
+{
+    HomeView(appState: {
+        let s = AppState(); s.phase = .loading(message: "Connecting…", progress: 0.4); return s
+    }())
+    .frame(width: 960, height: 600)
+}
+
+#Preview("HomeView — missing CLI")
+{
+    HomeView(appState: {
+        let s = AppState(); s.phase = .missingComponents(reason: .cliNotFound); return s
+    }())
+    .frame(width: 960, height: 600)
+}
+
+#Preview("ComingSoonView")
+{
+    ComingSoonView(section: .documentation)
+        .frame(width: 600, height: 400)
+        .background(Color(hex: 0x242424))
 }
