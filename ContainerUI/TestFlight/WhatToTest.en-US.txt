@@ -1,0 +1,33 @@
+---------- 1.0 ----------
+New:
+- Onboarding screens appear on first launch (3 steps, "Get started" completes them).
+- Contextual help popovers on each section via the ? button in the toolbar.
+- App icon is now set.
+
+Improved:
+- French localisation added throughout the app.
+- Accessibility labels on all action buttons and status indicators.
+
+Under the hood:
+- Hardened Runtime entitlements, GitHub Actions release workflow, Homebrew cask template.
+
+---------- 0.2 ----------
+New:
+- Tap any container row to open its detail sheet (resources, environment, mounts, and a Logs tab).
+- Delete a container or image from the list — a confirmation dialog appears before removal.
+- Pull an image using the download button in the Images toolbar; enter any OCI reference.
+- Add and remove container registries (Docker Hub, GHCR, etc.) with login credentials stored securely in the Keychain.
+
+---------- 0.1 ----------
+New:
+- Containers are now listed with their status, image, and action buttons (start, stop, restart).
+- Images are listed with their repository and tag.
+- The app detects whether Apple's container runtime is installed and running, and guides you through fixing it if not.
+- The app remembers its window size and the last selected section between launches.
+
+Improved:
+- Action buttons show a spinner on their row while an operation is in progress.
+- A warning appears when a container exits immediately after being started (e.g. no TTY).
+
+Under the hood:
+- Technical and reliability improvements.

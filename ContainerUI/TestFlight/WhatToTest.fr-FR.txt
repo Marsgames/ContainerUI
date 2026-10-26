@@ -1,0 +1,33 @@
+---------- 1.0 ----------
+Nouveautés :
+- Des écrans d'onboarding apparaissent au premier lancement (3 étapes, "Commencer" les termine).
+- Des popovers d'aide contextuelle dans chaque section via le bouton ? dans la barre d'outils.
+- L'icône de l'application est maintenant définie.
+
+Améliorations :
+- Localisation française ajoutée dans toute l'application.
+- Labels d'accessibilité sur tous les boutons d'action et indicateurs de statut.
+
+Sous le capot :
+- Hardened Runtime, workflow de release GitHub Actions, gabarit de cask Homebrew.
+
+---------- 0.2 ----------
+Nouveautés :
+- Appuyer sur un conteneur ouvre une fiche de détail (ressources, variables d'environnement, montages, et un onglet Logs).
+- Supprimer un conteneur ou une image depuis la liste — une boîte de confirmation s'affiche avant la suppression.
+- Télécharger une image via le bouton dans la barre d'outils des images ; saisir n'importe quelle référence OCI.
+- Ajouter et supprimer des registres (Docker Hub, GHCR, etc.) avec les identifiants stockés dans le Trousseau.
+
+---------- 0.1 ----------
+Nouveautés :
+- Les conteneurs sont listés avec leur statut, leur image et des boutons d'action (démarrer, arrêter, redémarrer).
+- Les images sont listées avec leur dépôt et leur tag.
+- L'application détecte si le runtime de conteneurs Apple est installé et en cours d'exécution, et guide l'utilisateur si ce n'est pas le cas.
+- L'application mémorise la taille de la fenêtre et la dernière section ouverte entre chaque lancement.
+
+Améliorations :
+- Les boutons d'action affichent un spinner sur leur ligne pendant qu'une opération est en cours.
+- Un avertissement s'affiche quand un conteneur s'arrête immédiatement après avoir été démarré (ex. absence de TTY).
+
+Sous le capot :
+- Améliorations techniques et de fiabilité.
